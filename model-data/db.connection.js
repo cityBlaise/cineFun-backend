@@ -6,7 +6,7 @@ import dotenv from "dotenv";
 dotenv.config();
 // initialize database connection
 const databaseUrl =
-  process.env?.NODE_ENV === "production"
+  process.env?.NODE_ENV === "prod"
     ? process.env.Mongo_prod
     : process.env.Mongo_dev;
 
