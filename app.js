@@ -1,6 +1,6 @@
 import express from "express";
 import { stopConnection, startConnection } from "./model-data/db.connection.js";
-import http from "http";
+import https from "https";
 import MovieRouter from './routers/movie.router.js'
 import TvShowRouter from './routers/tv_show.router.js'
 import cors from 'cors';
@@ -14,7 +14,7 @@ process.on("uncaughtException", (err) => {
 
 const app = express();
 app.use(cors())
-const server = http.createServer(app);
+const server = https.createServer(app);
 const port = process.env.PORT || 1998;
 
 const handleErrors = (res,fn,next) => { 
