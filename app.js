@@ -13,8 +13,8 @@ process.on("uncaughtException", (err) => {
 });
 
 const app = express();
-app.use(cors())
 const server = https.createServer(app);
+app.use(cors())
 const port = process.env.PORT || 1998;
 
 const handleErrors = (res,fn,next) => { 
@@ -39,9 +39,13 @@ const handleErrors = (res,fn,next) => {
 
 //serves static ressources
 app.use(express.static("public"));
+
 app.get('/',(req, res)=>res.json({message:"welcome to you !"}))
+
 MovieRouter(app,handleErrors);
+
 TvShowRouter(app,handleErrors);
+
 app.use((err, req, res, next) => {
   console.error(err.message, err.stack)
   res.status(500).json({error: "Internal Server Error"})
