@@ -1,6 +1,5 @@
 import express from "express";
-import { stopConnection, startConnection } from "./model-data/db.connection.js";
-import https from "https";
+import { stopConnection, startConnection } from "./model-data/db.connection.js"; 
 import MovieRouter from './routers/movie.router.js'
 import TvShowRouter from './routers/tv_show.router.js'
 import cors from 'cors';
@@ -12,8 +11,7 @@ process.on("uncaughtException", (err) => {
   process.exit(1);
 });
 
-const app = express();
-const server = https.createServer(app);
+const app = express(); 
 app.use(cors())
 const port = process.env.PORT || 1998;
 
@@ -51,7 +49,7 @@ app.use((err, req, res, next) => {
   res.status(500).json({error: "Internal Server Error"})
 })
 
-server.listen(port, () => {
+app.listen(port, () => {
   if (!process.env.PORT)
     console.log("cineFun server available at http://localhost:1998");
 });
