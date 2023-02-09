@@ -38,7 +38,7 @@ const handleErrors = (res,fn,next) => {
 //serves static ressources
 app.use(express.static("public"));
 
-app.get('/',(req, res)=>res.json({message:"welcome to you !"}))
+app.get('/',(req, res)=>res.status(200).json({message:"welcome to you !"}))
 
 MovieRouter(app,handleErrors);
 

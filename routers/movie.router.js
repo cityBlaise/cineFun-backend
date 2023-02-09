@@ -4,8 +4,7 @@ export default function (app, handleErrors) {
     handleErrors(res, await MovieService.get_movies_number_of_pages(), next);
   });
 
-  app.get("/api/movie/:page", async (req, res, next) => {
-    console.log('ici la');
+  app.get("/api/movie/:page", async (req, res, next) => { 
     const page = Number(req.params.page);
     handleErrors(res, await MovieService.get_movies_randomly(page), next);
   });

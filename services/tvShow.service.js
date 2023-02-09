@@ -38,13 +38,18 @@ export default {
         {
           $group: {
             _id: "$_id",
-            movie: { $first: "$$ROOT" },
-            genres: { $push: "$genres.name" },
+            serie: { $first: "$$ROOT" },
+            genres: {
+              $push: {
+                name: "$genres.name",
+                id: "$genres.id",
+              },
+            },
           },
         },
         {
           $replaceRoot: {
-            newRoot: { $mergeObjects: ["$movie", { genres: "$genres" }] },
+            newRoot: { $mergeObjects: ["$serie", { genres: "$genres" }] },
           },
         },
       ])
@@ -58,9 +63,9 @@ export default {
    * returns a integer corresponding to the number of page when we split the tvShow in blocks of (ItemPerPage)
    */
   get_tvShow_number_of_pages: async () => {
-      const quantity = await tvShow.countDocuments(); 
+    const quantity = await tvShow.countDocuments();
     return {
-      pages: Math.ceil( quantity/ ItemPerPage),
+      pages: Math.ceil(quantity / ItemPerPage),
     };
   },
 
@@ -96,8 +101,13 @@ export default {
         {
           $group: {
             _id: "$_id",
-            movie: { $first: "$$ROOT" },
-            genres: { $push: "$genres.name" },
+            serie: { $first: "$$ROOT" },
+            genres: {
+              $push: {
+                name: "$genres.name",
+                id: "$genres.id",
+              },
+            },
           },
         },
         {

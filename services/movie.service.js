@@ -39,7 +39,12 @@ export default {
           $group: {
             _id: "$_id",
             movie: { $first: "$$ROOT" },
-            genres: { $push: "$genres.name" },
+            genres: {
+              $push: {
+                name: "$genres.name",
+                id: "$genres.id",
+              },
+            },
           },
         },
         {
@@ -58,9 +63,9 @@ export default {
    * returns a integer corresponding to the number of page when we split the movies in blocks of (ItemPerPage)
    */
   get_movies_number_of_pages: async () => {
-      const quantity = await movie.countDocuments(); 
+    const quantity = await movie.countDocuments();
     return {
-      pages: Math.ceil( quantity/ ItemPerPage),
+      pages: Math.ceil(quantity / ItemPerPage),
     };
   },
 
@@ -97,7 +102,12 @@ export default {
           $group: {
             _id: "$_id",
             movie: { $first: "$$ROOT" },
-            genres: { $push: "$genres.name" },
+            genres: {
+              $push: {
+                name: "$genres.name",
+                id: "$genres.id",
+              },
+            },
           },
         },
         {

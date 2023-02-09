@@ -4,8 +4,7 @@ export default function (app, handleErrors) {
     handleErrors(res, await tvShowService.get_tvShow_number_of_pages(), next);
   });
 
-  app.get("/api/tvShow/:page", async (req, res, next) => {
-    console.log('ici la');
+  app.get("/api/tvShow/:page", async (req, res, next) => { 
     const page = Number(req.params.page);
     handleErrors(res, await tvShowService.get_tvShow_randomly(page), next);
   });
