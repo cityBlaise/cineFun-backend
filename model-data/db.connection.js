@@ -1,7 +1,6 @@
 import mongoose from "mongoose";
 import process from "node:process";
-mongoose.set("strictQuery", false);
-import credentials from "./../credentials.js";
+mongoose.set("strictQuery", false); 
 import dotenv from "dotenv";
 dotenv.config();
 // initialize database connection
