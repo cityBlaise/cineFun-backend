@@ -1,55 +1,68 @@
 import express from "express";
-import { stopConnection, startConnection } from "./model-data/db.connection.js"; 
-import MovieRouter from './routers/movie.router.js'
-import TvShowRouter from './routers/tv_show.router.js'
-import cors from 'cors';
-
-//on uncaughtException we end the database connection and exit the process
+import { stopConnection, startConnection } from "./model-data/db.connection.js";
+import cors from "cors";
+import setRoutes from "./utils/setRoutes.js";
+import { protocol, host } from "./utils/utils.js";
+import * as url from 'node:url';
+/**
+ *on uncaughtException we end the database connection and exit the process
+ */
 process.on("uncaughtException", (err) => {
   console.error("UNCAUGHT EXCEPTION\n", err.stack);
   stopConnection();
   process.exit(1);
 });
 
-const app = express(); 
-app.use(cors())
+/**
+ *  initializing our express server
+ */
+const app = express();
+const server = protocol.createServer(app);
+app.use(cors());
 const port = process.env.PORT || 1998;
 
-const handleErrors = (res,fn,next) => { 
-    try { 
-      return res.json(fn);
-    } catch (err) {
-      next(err);
-    } 
-};
-
-//database connection
+/**
+ *  database connection
+ */
 (async () => {
-
   try {
     await startConnection();
   } catch (error) {
     console.error(error.message);
+    stopConnection();
     process.exit(1);
   }
 })();
 
+/**
+ *  root path
+ */
+app.get("/", (req, res) =>
+  res.status(200).json({ message: "welcome to you !" })
+);
 
-//serves static ressources
-app.use(express.static("public"));
+/**
+ *  initialize all the business routes
+ */
+setRoutes(app);
 
-app.get('/',(req, res)=>res.status(200).json({message:"welcome to you !"}))
-
-MovieRouter(app,handleErrors);
-
-TvShowRouter(app,handleErrors);
-
-app.use((err, req, res, next) => {
-  console.error(err.message, err.stack)
-  res.status(500).json({error: "Internal Server Error"})
-})
-
-app.listen(port, () => {
-  if (!process.env.PORT)
-    console.log("cineFun server available at http://localhost:1998");
+// eslint-disable-next-line no-unused-vars
+app.use((req, res, next) => {
+  res.status(400).json({ error: "Bad Request" });
 });
+
+// eslint-disable-next-line no-unused-vars
+app.use((err, req, res, next) => {
+  console.error(err.message, err.stack);
+  res.status(500).json({ error: "Internal Server Error" });
+});
+
+if (import.meta.url.startsWith("file:")) {
+  const modulePath = url.fileURLToPath(import.meta.url);
+  if (process.argv[1] === modulePath) {
+    server.listen(port, () => {
+      console.log(`cineFun server available at ${host}${port}`);
+    });
+  }
+}
+export default app;

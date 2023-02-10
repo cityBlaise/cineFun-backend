@@ -59,7 +59,7 @@ export default {
 
   /**
    * @date 2023-02-09
-   * @returns {Number}
+   * @returns {Promise<Number>}
    * returns a integer corresponding to the number of page when we split the tvShow in blocks of (ItemPerPage)
    */
   get_tvShow_number_of_pages: async () => {
