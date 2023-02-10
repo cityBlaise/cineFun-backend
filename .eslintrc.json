@@ -12,7 +12,6 @@
         "sourceType": "module"
     },
     "rules": {
-        "no-console": "off",
-        "no-undef":"warn"
+        "no-console": "off"
     }
 }

@@ -2,8 +2,7 @@ import express from "express";
 import { stopConnection, startConnection } from "./model-data/db.connection.js";
 import cors from "cors";
 import setRoutes from "./utils/setRoutes.js";
-import { protocol, host } from "./utils/utils.js";
-import * as url from 'node:url';
+import { protocol, host } from "./utils/utils.js"; 
 /**
  *on uncaughtException we end the database connection and exit the process
  */
@@ -57,12 +56,14 @@ app.use((err, req, res, next) => {
   res.status(500).json({ error: "Internal Server Error" });
 });
 
-if (import.meta.url.startsWith("file:")) {
-  const modulePath = url.fileURLToPath(import.meta.url);
-  if (process.argv[1] === modulePath) {
-    server.listen(port, () => {
-      console.log(`cineFun server available at ${host}${port}`);
-    });
-  }
-}
-export default app;
+// if (import.meta.url.startsWith("file:")) {
+//   const modulePath = url.fileURLToPath(import.meta.url);
+//   if (process.argv[1] === modulePath) {
+   
+//   }
+
+server.listen(port, () => {
+  console.log(process.env.NODE_ENV);
+  console.log(`cineFun server available at ${host}${port}`);
+});
+ 

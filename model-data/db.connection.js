@@ -5,12 +5,11 @@ import dotenv from "dotenv";
 dotenv.config();
 // initialize database connection
 const databaseUrl =
-  process.env?.NODE_ENV === "prod"
+  process.env?.NODE_ENV == "prod"
     ? process.env.Mongo_prod
     : process.env.Mongo_dev;
 
-const startConnection = async () => {
-  let a;
+const startConnection = async () => { 
   if (!databaseUrl) {
     throw Error("MongoDB connection string missing!");
   }

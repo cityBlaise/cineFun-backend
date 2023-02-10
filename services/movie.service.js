@@ -13,6 +13,18 @@ const ItemPerPage = Number(process.env.ItemPerPage);
  */
 const number_of_item_to_skip = (page, ItemPerPage) => (page - 1) * ItemPerPage;
 
+  /**
+   * @date 2023-02-09
+   * @param {Number} genderId
+   * @returns {Number}
+   * returns the number of movie belong to a gender
+   */
+  async function number_of_movie_belong_to_a_gender(genderId) {
+    const mongoId = await gender.findOne({ id: genderId }, { _id: 1 });
+    return await movie.count({
+      genres: mongoId._id,
+    });
+  }
 export default {
   /**
    * @date 2023-02-09
@@ -118,19 +130,6 @@ export default {
       ])
       .skip(number_of_item_to_skip(page, ItemPerPage))
       .limit(Number(ItemPerPage));
-  },
-
-  /**
-   * @date 2023-02-09
-   * @param {Number} genderId
-   * @returns {Number}
-   * returns the number of movie belong to a gender
-   */
-  number_of_movie_belong_to_a_gender: async (genderId) => {
-    const mongoId = await gender.findOne({ id: genderId }, { _id: 1 });
-    return await movie.count({
-      genres: mongoId._id,
-    });
   },
 
   /**
