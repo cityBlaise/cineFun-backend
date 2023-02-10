@@ -55,9 +55,7 @@ await (async () => {
 /**
  *  initialize all the business routes
  */
-setRoutes(app);
-
- 
+setRoutes(app); 
 
 // eslint-disable-next-line no-unused-vars
 app.use((err, req, res, next) => {
