@@ -76,7 +76,7 @@ swaggerInit(host, app);
 /**
  *  root path redirect to the swagger page of the API
  */
-app.get("*", (req, res) => res.status(303).redirect(`/api-docs/`));
+app.get("/*", (req, res) => res.status(303).redirect(`/api-docs/`));
 
 
 
