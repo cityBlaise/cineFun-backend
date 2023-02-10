@@ -57,11 +57,7 @@ await (async () => {
  */
 setRoutes(app);
 
-// eslint-disable-next-line no-unused-vars
-app.get('/badRequest', (req, res, next) => {
-  erreur(`Error: ${req.ip.toString()} sent a bad request.`)
-  res.status(400).json({ error: "Bad Request" });
-});
+ 
 
 // eslint-disable-next-line no-unused-vars
 app.use((err, req, res, next) => {

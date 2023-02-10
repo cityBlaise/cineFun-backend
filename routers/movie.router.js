@@ -5,7 +5,7 @@
  *   description: The Movie managing API
  */
 import MovieService from "../services/movie.service.js";
-
+import { error as erreur } from "../utils/utils.js";
 export default function (app, handleErrors) {
   /**
    * @swagger
@@ -62,7 +62,8 @@ export default function (app, handleErrors) {
     const page = Number(req.params.page);
     if (page < 1) {
       console.log(page);
-      res.status(303).redirect(`/badRequest`);
+      erreur(`Error: ${req.ip.toString()} sent a bad request.`);
+      res.status(400).json({ error: "Bad Request" });
     } else
       handleErrors(res, await MovieService.get_movies_randomly(page), next);
   });
@@ -100,7 +101,8 @@ export default function (app, handleErrors) {
     const id = Number(req.params.genderId);
     if (id < 1) {
       console.log(id);
-      res.status(303).redirect(`/badRequest`);
+      erreur(`Error: ${req.ip.toString()} sent a bad request.`);
+      res.status(400).json({ error: "Bad Request" });
     } else
       return await handleErrors(
         res,
@@ -146,7 +148,10 @@ export default function (app, handleErrors) {
   app.get("/api/movie/gender/:genderId/:page", async (req, res, next) => {
     const id = Number(req.params.genderId);
     const page = Number(req.params.page);
-    if (page < 1 || id < 1) res.status(303).redirect(`/badRequest`);
+    if (page < 1 || id < 1) {
+      erreur(`Error: ${req.ip.toString()} sent a bad request.`);
+      res.status(400).json({ error: "Bad Request" });
+    } 
     else
       handleErrors(res, await MovieService.get_movie_by_gender(id, page), next);
   });
