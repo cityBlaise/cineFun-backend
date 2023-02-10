@@ -4,10 +4,7 @@ mongoose.set("strictQuery", false);
 import dotenv from "dotenv";
 dotenv.config();
 // initialize database connection
-const databaseUrl =
-  process.env?.NODE_ENV  
-    ? process.env.Mongo_prod
-    : process.env.Mongo_dev;
+const databaseUrl = process.env.Mongo_prod || process.env.Mongo_dev;
 
 const startConnection = async () => { 
   if (!databaseUrl) {
