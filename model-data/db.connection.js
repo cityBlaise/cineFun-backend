@@ -15,10 +15,8 @@ const startConnection = async () => {
       useNewUrlParser: true,
       useUnifiedTopology: true
     });
-    console.log("Connection to the db established...");
     return;
-  } catch (error) {
-    console.log("MongoDB error:", error.message);
+  } catch (error) {  
     throw Error("MongoDB error: " + error.message);
   }
 };

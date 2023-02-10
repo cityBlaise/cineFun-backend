@@ -1,15 +1,19 @@
 import express from "express";
-import { stopConnection, startConnection } from "./model-data/db.connection.js";
+import { startConnection } from "./model-data/db.connection.js";
 import cors from "cors";
 import setRoutes from "./utils/setRoutes.js";
-import { protocol, host } from "./utils/utils.js"; 
+import { protocol, host, port,databasehost, error as erreur, succes } from "./utils/utils.js";
+import * as url from "node:url";
+import swaggerInit from "./swagger-documentation/swagger.init.js";
+
+let dataBaseConnectionAttentLimit = 5;
 /**
  *on uncaughtException we end the database connection and exit the process
  */
 process.on("uncaughtException", (err) => {
   console.error("UNCAUGHT EXCEPTION\n", err.stack);
-  stopConnection();
-  process.exit(1);
+  // stopConnection();
+  // process.exit(1);
 });
 
 /**
@@ -17,28 +21,36 @@ process.on("uncaughtException", (err) => {
  */
 const app = express();
 const server = protocol.createServer(app);
+app.use((req, res, next) => {
+  res.set("x-powered-by", "Blaise Nkwanhou Sitchi");
+  next();
+});
+
 app.use(cors());
-const port = process.env.PORT || 1998;
 
 /**
  *  database connection
  */
-(async () => {
-  try {
-    await startConnection();
-  } catch (error) {
-    console.error(error.message);
-    stopConnection();
-    process.exit(1);
+await (async () => {
+  let connected = false;
+  while (!connected && dataBaseConnectionAttentLimit > 0) {
+    try {
+      await startConnection();
+      connected = true;
+      succes("Connection established with the data ...");
+      succes(`database name: ${databasehost}`);
+      return
+    } catch (error) {
+      dataBaseConnectionAttentLimit--;
+      let attend = dataBaseConnectionAttentLimit > 1 ? "attends" : "attend";
+      erreur(
+        `Error during the connection to the database${error.message}\n ${dataBaseConnectionAttentLimit} ${attend} remainning`
+      );
+    }
   }
+  succes('process exit')
+  process.exit(1);
 })();
-
-/**
- *  root path
- */
-app.get("/", (req, res) =>
-  res.status(200).json({ message: "welcome to you !" })
-);
 
 /**
  *  initialize all the business routes
@@ -46,24 +58,36 @@ app.get("/", (req, res) =>
 setRoutes(app);
 
 // eslint-disable-next-line no-unused-vars
-app.use((req, res, next) => {
+app.get('/badRequest', (req, res, next) => {
+  erreur(`Error: ${req.ip.toString()} sent a bad request.`)
   res.status(400).json({ error: "Bad Request" });
 });
 
 // eslint-disable-next-line no-unused-vars
 app.use((err, req, res, next) => {
-  console.error(err.message, err.stack);
+  erreur("Server Internal error\n"+err.message+"\n"+ err.stack);
   res.status(500).json({ error: "Internal Server Error" });
 });
+/**
+ * Enable Swagger documentation for this API
+ */
+swaggerInit(host, app);
 
-// if (import.meta.url.startsWith("file:")) {
-//   const modulePath = url.fileURLToPath(import.meta.url);
-//   if (process.argv[1] === modulePath) {
-   
-//   }
+/**
+ *  root path redirect to the swagger page of the API
+ */
+app.get("*", (req, res) => res.status(303).redirect(`/api-docs/`));
 
-server.listen(port, () => {
-  console.log(process.env.NODE_ENV);
-  console.log(`cineFun server available at ${host}${port}`);
-});
- 
+
+
+if (import.meta.url.startsWith("file:")) {
+  const modulePath = url.fileURLToPath(import.meta.url);
+  if (process.argv[1] === modulePath) {
+    server.listen(port, () => {
+      console.log(process.env.NODE_ENV);
+      console.log(`cineFun server available at ${host}`);
+    });
+  }
+}
+
+export default app;

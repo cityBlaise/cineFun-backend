@@ -21,6 +21,8 @@ const number_of_item_to_skip = (page, ItemPerPage) => (page - 1) * ItemPerPage;
    */
   async function number_of_movie_belong_to_a_gender(genderId) {
     const mongoId = await gender.findOne({ id: genderId }, { _id: 1 });
+    console.log('number :',mongoId)
+    if(mongoId ==null) return 0;
     return await movie.count({
       genres: mongoId._id,
     });
@@ -91,6 +93,7 @@ export default {
   get_movie_by_gender: async (genderId, page) => {
     if (page < 1) return { result: [] };
     const mongoId = await gender.findOne({ id: genderId }, { _id: 1 });
+    if (!mongoId) return { result: [] };
     return await movie
       .aggregate([
         {
@@ -138,7 +141,10 @@ export default {
    * @returns {any}
    */
   number_of_pages_of_a_gender: async (genderId) => {
+    console.log('ici la');
     const total = await number_of_movie_belong_to_a_gender(genderId);
-    return Math.ceil(total / ItemPerPage);
+    console.log('total ',total);
+    const result = await Math.ceil(total / ItemPerPage);
+    return await {page:result}
   },
 };
