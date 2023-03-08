@@ -55,7 +55,7 @@ await (async () => {
 app.use((req, res, next) => {
   info(
     `\nGot a new ${req.method} request 
-    from: ${req.ip}
+    from: ${req.socket.remoteAddress}
     path: ${req.path} 
     params: ${formatQueryParams(req.query)}`);
   next();
