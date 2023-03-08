@@ -2,55 +2,68 @@
  * @swagger
  * components:
  *   schemas:
- *     TV-SHOW:
+ *     TvShow:
  *       type: object 
  *       properties:
  *         id:
- *           type: string
- *           description: id of the TV-SHOW
+ *           type: number
+ *           description: id of the TvShow
  *         title:
  *           type: string
- *           description: The title of your TV-SHOW
+ *           description: The title of the TvShow
  *         adulte:
  *            type: boolean
- *            description: TV-SHOW for Adults or not
+ *            description: TvShow for Adults or not
  *         homepage: 
  *            type: string
- *            description: The home page dedicate to this TV-SHOW
+ *            description: The home page dedicated to the TvShow
  *         backdrop_path:
  *            type: string
- *            description: the path to the TV-SHOW poster
+ *            description: the path to the TvShow poster
+ *         created_by:
+ *            type: array
+ *            items:
+ *               $ref: '#/components/schemas/Author'
+ *            description: the authors of the TvShow
  *         genres:
  *            type: array
- *            description: list of gender that the TV-SHOW is belong to
+ *            items:
+ *               $ref: '#/components/schemas/Gender'
+ *            description: list of gender that the TvShow is belong to
  *         popularity:
  *            type: number
- *            description: till how much the TV-SHOW is popular
+ *            description: till how much the TvShow is popular
  *         overview:
  *            type: string
- *            description: a resume of the TV-SHOW
- *         status:
- *           type: string
- *           description: released or not
- *         vote_average:
- *            type: number
- *            description: average of votes for this TV-SHOW
- *         runtime: 
- *            type: number
- *            description: duration
- *         revenue:
- *            type: number
- *            description: Amount of money gained 
- *         release_date:
+ *            description: a summary of the TvShow
+ *         first_air_date:
  *           type: string
  *           format: date
- *           description: The date the TV-SHOW was released
+ *           description: The first released date
+ *         last_air_date:
+ *           type: string
+ *           format: date
+ *           description: The last released date
+ *         vote_average:
+ *            type: number
+ *            description: average of votes for this TvShow
+ *         number_of_episodes:
+ *            type: number
+ *            description: number of votes for the TvShow
+ *         number_of_seasons:
+ *            type: number
+ *            description: number of votes for the TvShow
+ *         seasons:
+ *            type: array
+ *            items:
+ *               $ref: '#/components/schemas/Season'
+ *            description: List of season of the TvShow
+ *         vote_count:
+ *            type: number
+ *            description: number of votes for the TvShow
  *         poster_path:
  *            type: string
  *            description: the path to the poster image
- *         vote_count:
- *            type: number
- *            description: number of votes for the TV-SHOW
  *       example:
  *         adult: false
  *         backdrop_path: /5pMy5LF2JAleBNBtuzizfCMWM7k.jpg

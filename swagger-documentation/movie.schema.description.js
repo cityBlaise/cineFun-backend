@@ -21,9 +21,10 @@
  *            type: string
  *            description: the path to the Movie poster
  *         genres:
- *           schema:
- *              type: array 
- *           description: list of gender that the Movie is belong to
+ *            type: array 
+ *            items:
+ *              $ref: '#/components/schemas/Gender'
+ *            description: list of gender that the Movie is belong to
  *         popularity:
  *            type: number
  *            description: till how much the Movie is popular

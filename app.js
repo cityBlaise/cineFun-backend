@@ -2,7 +2,7 @@ import express from "express";
 import { startConnection } from "./model-data/db.connection.js";
 import cors from "cors";
 import setRoutes from "./utils/setRoutes.js";
-import { protocol, host, port,databasehost, error as erreur, succes } from "./utils/utils.js";
+import { protocol, host, port,databasehost, error as erreur, succes, info, formatQueryParams } from "./utils/utils.js";
 import * as url from "node:url";
 import swaggerInit from "./swagger-documentation/swagger.init.js";
 
@@ -11,7 +11,7 @@ let dataBaseConnectionAttentLimit = 5;
  *on uncaughtException we end the database connection and exit the process
  */
 process.on("uncaughtException", (err) => {
-  console.error("UNCAUGHT EXCEPTION\n", err.stack);
+  console.error("UNCAUGHT EXCEPTION city\n", err.stack);
   // stopConnection();
   // process.exit(1);
 });
@@ -52,6 +52,15 @@ await (async () => {
   process.exit(1);
 })();
 
+app.use((req, res, next) => {
+  info(
+    `\nGot a new ${req.method} request 
+    from: ${req.ip}
+    path: ${req.path} 
+    params: ${formatQueryParams(req.query)}`);
+  next();
+});
+
 /**
  *  initialize all the business routes
  */
@@ -62,6 +71,7 @@ app.use((err, req, res, next) => {
   erreur("Server Internal error\n"+err.message+"\n"+ err.stack);
   res.status(500).json({ error: "Internal Server Error" });
 });
+
 /**
  * Enable Swagger documentation for this API
  */
@@ -70,7 +80,6 @@ swaggerInit(host, app);
 /**
  *  root path redirect to the swagger page of the API
  */
-app.get("/*", (req, res) => res.status(303).redirect(`/api-docs/`));
 
 
 

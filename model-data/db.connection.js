@@ -17,14 +17,12 @@ const startConnection = async () => {
     });
     return;
   } catch (error) {  
-    throw Error("MongoDB error: " + error.message);
+    throw Error("*\nerror: " + error.message);
   }
 };
 
 const stopConnection = async () => {
-  await mongoose.disconnect();
-  console.log("Connection to the db closed...");
+  return await mongoose.disconnect(); 
 };
 
-export { startConnection, stopConnection };
-// module.exports = getConnection
+export { startConnection, stopConnection }; 

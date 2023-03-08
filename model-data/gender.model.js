@@ -4,4 +4,4 @@ const genreSchema = new Schema({
   name:  {type:String, required:true} ,
 });
 const gender = model('genre',genreSchema)
-export default gender
+export  {gender,genreSchema}
